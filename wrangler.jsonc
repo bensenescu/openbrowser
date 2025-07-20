@@ -1,0 +1,48 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "openbrowser",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-05-23",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"observability": {
+		"enabled": true
+	},
+	"containers": [
+		{
+			"class_name": "BrowserContainer",
+			"image": "./Dockerfile",
+			"max_instances": 10,
+			"instance_type": "standard",
+			"name": "browser-containers"
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"class_name": "BrowserContainer",
+				"name": "BROWSER_CONTAINER"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"new_sqlite_classes": [
+				"BrowserContainer"
+			],
+			"tag": "v1"
+		}
+	],
+	/**
+	 * Environment Variables
+	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
+	 */
+	"vars": { 
+		"DEV": "false"
+	}
+}
